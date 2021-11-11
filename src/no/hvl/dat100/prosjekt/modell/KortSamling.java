@@ -1,5 +1,6 @@
 package no.hvl.dat100.prosjekt.modell;
 
+
 import no.hvl.dat100.prosjekt.TODO;
 import no.hvl.dat100.prosjekt.kontroll.dommer.Regler;
 
@@ -21,11 +22,8 @@ public class KortSamling {
 	 * Oppretter en tom Kortsamling med plass til MAKS_KORT (hele kortstokken).
 	 */
 	public KortSamling() {
-		
-		// TODO - START
-		
-		throw new UnsupportedOperationException(TODO.constructor("KortSamling"));
-		// TODO - END
+		this.samling = new Kort[MAKS_KORT];
+		this.antall = 0;
 	}
 
 	/**
@@ -50,11 +48,8 @@ public class KortSamling {
 	 */
 	public int getAntalKort() {
 		
-		// TODO - START
+		return antall;
 		
-		throw new UnsupportedOperationException(TODO.method());
-		
-		// TODO - END
 	}
 	
 	/**
@@ -64,11 +59,12 @@ public class KortSamling {
 	 */
 	public boolean erTom() {
 		
-		// TODO - START
-				
-		throw new UnsupportedOperationException(TODO.method());
+		if(samling[0]==null) {
+			return true;
+		}else {
+			return false;
+		}
 		
-		// TODO - END
 	}
 
 	/**
@@ -78,11 +74,8 @@ public class KortSamling {
 	 *            er kortet som skal leggast til.
 	 */
 	public void leggTil(Kort kort) {
-		
-		// TODO - START
-		
-		throw new UnsupportedOperationException(TODO.method());
-		// TODO - END
+		samling[antall] = kort;
+		antall++;
 		
 	}
 	
@@ -92,22 +85,23 @@ public class KortSamling {
 	 */
 	public void leggTilAlle() {
 		
-		// TODO - START
-		// Husk: bruk Regler.MAKS_KORT_FARGE for å få antall kort per farge
+		for (Kortfarge f : Kortfarge.values()) {
+			for (int i = 1; i <= Regler.MAKS_KORT_FARGE; i++) {
+				leggTil(new Kort(f,i));
+			}
+			}
+		}	
 		
-		throw new UnsupportedOperationException(TODO.method());
-		// TODO - END
-	}
 
 	/**
 	 * Fjerner alle korta fra samlinga slik at den blir tom.
 	 */
 	public void fjernAlle() {
 		
-		// TODO - START
+		for(Kort s:samling) {
+			fjern(s);
+		}
 		
-		throw new UnsupportedOperationException(TODO.method());
-		// TODO - END
 	}
 	
 	/**
@@ -118,11 +112,18 @@ public class KortSamling {
 	 */
 	public Kort seSiste() {
 		
-		// TODO - START
-		
-		throw new UnsupportedOperationException(TODO.method());
-
-		// TODO - END
+		Kort sisteKort = null;
+		int i = 0;
+		for(Kort s:samling) {
+			if(s==null && i!=0) {
+				sisteKort = samling[i-1];
+				break;
+			}else {
+				sisteKort = s;
+			}
+			i++;
+		}
+		return sisteKort;
 		
 	}
 
@@ -134,11 +135,10 @@ public class KortSamling {
 	 */
 	public Kort taSiste() {
 		
-		// TODO - START
+		Kort taSiste = seSiste();
+		fjern(taSiste);
 		
-		throw new UnsupportedOperationException(TODO.method());
-		
-		// TODO - END
+		return taSiste;
 	}
 	
 	/**
@@ -149,13 +149,30 @@ public class KortSamling {
 	 * @return true om kortet finst i samlinga, false ellers.
 	 */
 	public boolean har(Kort kort) {
+		int x = 0, i = 0;
 		
-		// TODO - START
-		
-		throw new UnsupportedOperationException(TODO.method());
-		// return false;
-		// TODO - END
-		
+		for(Kort s: samling) {
+			if(s != null) {
+				x++;
+			}
+		}
+		Kort[] nySamling = new Kort[x];
+		for(Kort s: samling) {
+			if(s != null) {
+				nySamling[i] = s;
+				i++;
+			}
+		}
+		boolean finnes = false;
+		if(kort != null) {
+			for(Kort s: nySamling) {
+				if(s.equals(kort)) {
+					finnes = true;
+			}
+		}
+		}
+			
+		return finnes;
 	}
 
 	/**
@@ -169,12 +186,18 @@ public class KortSamling {
 	 */
 			 
 	public boolean fjern(Kort kort) {
-		
-		// TODO - START
-		
-		throw new UnsupportedOperationException(TODO.method());
-
-		// TODO - END
+	boolean fjerna = false;
+	
+		if(kort != null) {
+			for(int i = 0;i<samling.length;i++) {
+				if(samling[i]==kort) {
+					samling[i] = null;
+					fjerna = true;
+					antall--;
+				}
+			}
+		}
+		return fjerna;
 	}
 
 	/**
@@ -185,12 +208,22 @@ public class KortSamling {
 	 */
 	public Kort[] getAllekort() {
 		
-		// TODO - START
+		int x = 0;
+		int i = 0;
+		for(Kort s: samling) {
+			if(s != null) {
+				x++;
+			}
+		}
+		Kort[] nySamling = new Kort[x];
+		for(Kort s: samling) {
+			if(s != null) {
+				nySamling[i] = s;
+				i++;
+			}
+		}
+		return nySamling;
 		
-		throw new UnsupportedOperationException(TODO.method());
-
-		// TODO - END
-	
 	}
 	
 }

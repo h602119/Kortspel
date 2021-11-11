@@ -89,5 +89,7 @@ public interface ISpiller {
 	 * @return neste handling.
 	 */
 	public Handling nesteHandling(Kort topp);
-
+	
+	
+	
 }

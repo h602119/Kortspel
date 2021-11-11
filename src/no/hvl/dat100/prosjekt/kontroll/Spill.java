@@ -6,6 +6,7 @@ import no.hvl.dat100.prosjekt.modell.KortSamling;
 import no.hvl.dat100.prosjekt.TODO;
 import no.hvl.dat100.prosjekt.kontroll.dommer.Regler;
 import no.hvl.dat100.prosjekt.kontroll.spill.Handling;
+import no.hvl.dat100.prosjekt.kontroll.spill.HandlingsType;
 import no.hvl.dat100.prosjekt.kontroll.spill.Spillere;
 import no.hvl.dat100.prosjekt.modell.Kort;
 import no.hvl.dat100.prosjekt.modell.KortUtils;
@@ -28,12 +29,11 @@ public class Spill {
 	
 	public Spill() {
 		
-		// TODO - START
-		
-		throw new UnsupportedOperationException(TODO.constructor("Spill"));
-		// TODO - END
-		
+		this.nord = new NordSpiller(Spillere.NORD);
+		this.syd = new SydSpiller(Spillere.SYD);
+		this.bord = new Bord();
 	}
+	
 	
 	/**
 	 * Gir referanse/peker til bord.
@@ -42,11 +42,7 @@ public class Spill {
 	 */
 	public Bord getBord() {
 		
-		// TODO - START
-		
-		throw new UnsupportedOperationException(TODO.method());
-
-		// TODO - END
+		return bord;
 		
 	}
 	
@@ -57,11 +53,7 @@ public class Spill {
 	 */
 	public ISpiller getSyd() {
 		
-		// TODO - START
-		
-		throw new UnsupportedOperationException(TODO.method());
-
-		// TODO - END
+		return syd;
 		
 	}
 
@@ -72,11 +64,7 @@ public class Spill {
 	 */
 	public ISpiller getNord() {
 		
-		// TODO - START
-
-		throw new UnsupportedOperationException(TODO.method());
-
-		// TODO - END
+		return nord;
 	}
 
 	/**
@@ -90,10 +78,9 @@ public class Spill {
 	 */
 	public void start() {
 		
-		// TODO - START
-		
-		throw new UnsupportedOperationException(TODO.method());
-		// TODO - END
+		KortUtils.stokk(bord.getBunkeFra());
+		delutKort();
+		bord.vendOversteFraBunke();
 	}
 
 	/**
@@ -102,10 +89,11 @@ public class Spill {
 	 */
 	private void delutKort() {
 
-		// TODO - START
+		for(int i = 0 ;i<ANTALL_KORT_START;i++) {
+			nord.leggTilKort(bord.taOversteFraBunke());
+			syd.leggTilKort(bord.taOversteFraBunke());
+		}
 		
-		throw new UnsupportedOperationException(TODO.method());
-		// TODO - END
 	}
 
 	/**
@@ -119,12 +107,14 @@ public class Spill {
 	 * @return kortet som trekkes.
 	 */
 	public Kort trekkFraBunke(ISpiller spiller) {
-
-		// TODO - START
-			
-		throw new UnsupportedOperationException(TODO.method());
-
-		// TODO - END
+		
+		if(bord.antallBunkeFra() == 0) {
+			bord.snuTilBunken();
+		}
+		Kort fraBunkeKort = bord.taOversteFraBunke();
+		spiller.trekker(fraBunkeKort);
+		
+		return fraBunkeKort;
 	}
 
 	/**
@@ -137,11 +127,7 @@ public class Spill {
 	 */
 	public Handling nesteHandling(ISpiller spiller) {
 		
-		// TODO - START
-		
-		throw new UnsupportedOperationException(TODO.method());
-
-		// TODO - END
+	return spiller.nesteHandling(bord.seOversteBunkeTil());
 		
 	}
 
@@ -158,12 +144,16 @@ public class Spill {
 	 * @return true dersom spilleren har kortet, false ellers.
 	 */
 	public boolean leggnedKort(ISpiller spiller, Kort kort) {
+		boolean isLagtNed = false;
 		
-		// TODO - START
+		if(spiller.getHand().har(kort)) {
+			
+			spiller.fjernKort(kort);
+			bord.leggNedBunkeTil(kort);
+			isLagtNed = true;
+		}
 		
-		throw new UnsupportedOperationException(TODO.method());
-
-		// TODO - END
+		return isLagtNed;
 	}
 
 	/**
@@ -175,11 +165,8 @@ public class Spill {
 	 */
 	public void forbiSpiller(ISpiller spiller) {
 		
-		// TODO - START
+		spiller.setAntallTrekk(0);
 		
-		throw new UnsupportedOperationException(TODO.method());
-	
-		// TODO - END
 	}
 
 	/**
@@ -194,17 +181,25 @@ public class Spill {
 	 * @return kort som trekkes, kort som spilles eller null ved forbi.
 	 */
 	public Kort utforHandling(ISpiller spiller, Handling handling) {
+		
 
-		// TODO - START
-		Kort kort = null;
-
-		// Hint: del opp i de tre mulige handlinger og vurder 
-		// om noen andre private metoder i klassen kan brukes
-		// til å implementere denne metoden
-				
-		throw new UnsupportedOperationException(TODO.method());
-
-		// TODO - END
+		if(handling.getType() == HandlingsType.FORBI) {
+			
+			forbiSpiller(spiller);
+			return null;
+			
+		}else if(handling.getType() == HandlingsType.LEGGNED) {
+			
+			leggnedKort(spiller,handling.getKort());
+			return handling.getKort();
+			
+		}else if(handling.getType() == HandlingsType.TREKK) {
+			
+			return trekkFraBunke(spiller);
+			
+		}
+		return null;
+		
 	}
 
 }

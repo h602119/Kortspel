@@ -6,6 +6,7 @@ import no.hvl.dat100.prosjekt.TODO;
 
 public class KortUtils {
 
+	
 	/**
 	 * Sorterer en samling. Rekkefølgen er bestemt av compareTo() i Kort-klassen.
 	 * 
@@ -16,12 +17,26 @@ public class KortUtils {
 	 */
 	
 	public static void sorter(KortSamling samling) {
+		Kort[] copyS = samling.getAllekort();
 		
-		// TODO - START
-		
-		throw new UnsupportedOperationException(TODO.method());
-		// TODO - END
+		Kort tmpKort;
+		int teller = samling.getAntalKort();
+
+		for (int i = 0 ;i < teller;i++) {
+			for (int j = i; j< teller; j++) {
+				
+				if (copyS[i].compareTo(copyS[j]) > 0) {
+					
+					tmpKort = copyS[i];
+					copyS[i] = copyS[j];
+					copyS[j] = tmpKort;
+				}
+			}
+		}		
 	}
+	
+
+	
 	
 	/**
 	 * Stokkar en kortsamling. 
@@ -31,10 +46,21 @@ public class KortUtils {
 	 */
 	public static void stokk(KortSamling samling) {
 		
-		// TODO - START
+		Kort[] copyS = samling.getAllekort();
+		KortSamling nyS = new KortSamling();
+		 
+		Kort tmpKort;
+		int teller = samling.getAntalKort();
+		int random;
 		
-		throw new UnsupportedOperationException(TODO.method());
-		// TODO - END
-	}
-	
+		for(int i = 0; i<teller ;i++) {
+			random = (int)((Math.random()*teller));
+			if(nyS.har(copyS[random])) {
+				i--;
+			}else {
+				tmpKort = copyS[random];
+				nyS.leggTil(tmpKort);
+			}
+		}
+	}	
 }
